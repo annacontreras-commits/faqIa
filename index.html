@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ Interno — Privacy</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --or:#F68D3D;--or-d:#D4651A;--or-l:#FAC69E;--or-bg:#FDE2CE;
+  --cream:#F4EEE5;--cream-d:#EAE0D4;
+  --dark:#23201F;--grey:#7A7065;--grey-l:#D8D0C6;
+  --white:#FFFFFF;--green:#3B6D11;--green-l:#EAF3DE;
+  --blue:#185FA5;--blue-l:#E6F1FB;
+  --purple:#534AB7;--purple-l:#EEEDFE;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;display:flex;flex-direction:column}
+header{background:var(--dark);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+header h1{font-size:16px;font-weight:700;color:white}
+header p{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px}
+.status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--or)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--or);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.main{display:flex;flex:1;overflow:hidden;height:calc(100vh - 60px)}
+
+/* SIDEBAR */
+.sidebar{width:280px;flex-shrink:0;background:var(--white);border-right:.5px solid var(--grey-l);display:flex;flex-direction:column;overflow:hidden}
+.sidebar-header{padding:1rem 1.25rem;border-bottom:.5px solid var(--grey-l)}
+.sidebar-header h2{font-size:12px;font-weight:600;color:var(--grey);text-transform:uppercase;letter-spacing:.06em}
+.history{flex:1;overflow-y:auto;padding:.5rem}
+.history-item{padding:.6rem .75rem;border-radius:8px;font-size:12px;color:var(--grey);cursor:pointer;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .1s}
+.history-item:hover{background:var(--cream)}
+.history-item.active{background:var(--or-bg);color:var(--or-d);font-weight:500}
+.new-btn{margin:.75rem;padding:.6rem 1rem;background:var(--or);color:white;border:none;border-radius:8px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+.new-btn:hover{background:var(--or-d)}
+
+/* CHAT */
+.chat-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.messages{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
+
+.welcome{text-align:center;padding:3rem 2rem;max-width:520px;margin:0 auto}
+.welcome-icon{font-size:40px;margin-bottom:1rem}
+.welcome h2{font-size:20px;font-weight:700;color:var(--dark);margin-bottom:8px}
+.welcome p{font-size:13px;color:var(--grey);line-height:1.6;margin-bottom:1.5rem}
+.suggestions{display:flex;flex-direction:column;gap:8px}
+.suggestion{padding:10px 14px;background:var(--white);border:.5px solid var(--grey-l);border-radius:10px;font-size:13px;color:var(--dark);text-align:left;cursor:pointer;transition:border-color .15s,background .15s}
+.suggestion:hover{border-color:var(--or);background:var(--or-bg)}
+
+/* Messages */
+.msg{display:flex;flex-direction:column;gap:4px;max-width:90%}
+.msg.user{align-self:flex-end}
+.msg.ai{align-self:flex-start}
+.msg-bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6}
+.msg.user .msg-bubble{background:var(--or);color:white;border-radius:12px 12px 2px 12px}
+.msg.ai .msg-bubble{background:var(--white);border:.5px solid var(--grey-l);border-radius:12px 12px 12px 2px}
+.msg-time{font-size:10px;color:var(--grey-l);padding:0 4px}
+.msg.user .msg-time{text-align:right}
+
+/* AI Response card */
+.ai-card{background:var(--white);border:.5px solid var(--grey-l);border-radius:14px;overflow:hidden;max-width:600px}
+.ai-card-section{padding:12px 16px;border-bottom:.5px solid var(--grey-l)}
+.ai-card-section:last-child{border-bottom:none}
+.section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.label-source{color:var(--purple)}
+.label-response{color:var(--green)}
+.label-tip{color:var(--blue)}
+.section-content{font-size:13px;color:var(--dark);line-height:1.6}
+.source-tag{display:inline-block;background:var(--purple-l);color:var(--purple);font-size:11px;font-weight:500;padding:2px 8px;border-radius:6px;margin-bottom:6px}
+.response-box{background:var(--green-l);border:.5px solid var(--green);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--dark);line-height:1.6;margin-top:4px}
+.copy-btn{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:5px 12px;background:var(--green);color:white;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:opacity .15s}
+.copy-btn:hover{opacity:.85}
+.copy-btn.copied{background:var(--grey)}
+
+/* Typing indicator */
+.typing{display:flex;align-items:center;gap:4px;padding:12px 16px;background:var(--white);border:.5px solid var(--grey-l);border-radius:12px;width:fit-content}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--grey-l);animation:bounce .8s infinite}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+/* Input */
+.input-area{padding:1rem 1.5rem;border-top:.5px solid var(--grey-l);background:var(--white)}
+.input-wrap{display:flex;align-items:flex-end;gap:10px;background:var(--cream);border:1.5px solid var(--grey-l);border-radius:12px;padding:8px 12px;transition:border-color .15s}
+.input-wrap:focus-within{border-color:var(--or)}
+.input-wrap textarea{flex:1;border:none;background:transparent;font-family:'Poppins',sans-serif;font-size:13px;color:var(--dark);resize:none;outline:none;max-height:120px;min-height:22px;line-height:1.5}
+.input-wrap textarea::placeholder{color:var(--grey-l)}
+.send-btn{width:34px;height:34px;border-radius:8px;background:var(--or);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.send-btn:hover{background:var(--or-d)}
+.send-btn:disabled{background:var(--grey-l);cursor:default}
+.send-btn svg{width:16px;height:16px}
+.input-hint{font-size:11px;color:var(--grey-l);margin-top:6px;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>FAQ Interno — Privacy</h1>
+    <p>Uso interno · Time de Customer Success</p>
+  </div>
+  <div class="status"><span class="status-dot"></span>IA ativa</div>
+</header>
+
+<div class="main">
+
+  <div class="sidebar">
+    <div class="sidebar-header"><h2>Histórico</h2></div>
+    <div class="history" id="history"></div>
+    <button class="new-btn" onclick="newChat()">+ Nova consulta</button>
+  </div>
+
+  <div class="chat-area">
+    <div class="messages" id="messages">
+      <div class="welcome" id="welcome">
+        <div class="welcome-icon">🤖</div>
+        <h2>Olá! Sou o FAQ Interno da Privacy.</h2>
+        <p>Faço consultas aos procedimentos internos, FAQ e manual de atualizações para te ajudar a resolver casos com rapidez. Também sugiro uma resposta pronta para enviar ao creator.</p>
+        <div class="suggestions">
+          <button class="suggestion" onclick="sendSuggestion(this.textContent)">Como funciona o ranking por região?</button>
+          <button class="suggestion" onclick="sendSuggestion(this.textContent)">Creator não consegue republicar um conteúdo</button>
+          <button class="suggestion" onclick="sendSuggestion(this.textContent)">Qual é o valor mínimo de assinatura?</button>
+          <button class="suggestion" onclick="sendSuggestion(this.textContent)">Como configurar mensagem de renovação?</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="input-wrap">
+        <textarea id="inp" placeholder="Descreva o caso ou faça sua pergunta..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="send-btn" onclick="send()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      <div class="input-hint">Enter para enviar · Shift+Enter para nova linha</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var SYSTEM_PROMPT = `Você é uma IA de suporte interno do time de Customer Success da Privacy.com.br, uma plataforma brasileira de creator economy.
+
+Seu papel é ajudar as analistas de atendimento a resolver casos de creators, consultando os procedimentos internos e sugerindo respostas prontas.
+
+REGRAS DE TOM DE VOZ (obrigatórias na resposta sugerida):
+- Sem emojis
+- Linguagem objetiva, educada e profissional
+- Sem apelidos como "linda", "meu bem", "gata" ou "amiga"
+- Pode usar versão curta do nome da creator (ex: Ju, Fe, Bia) se o clima permitir
+- Se apresentar sempre pelo nome completo da analista
+- Profissional sem ser distante — cuidado genuíno, sem forçar intimidade
+- Direto ao ponto, sem rodeios
+- Transparente dentro do que é permitido compartilhar
+
+CONHECIMENTO BASE — MANUAL DE ATUALIZAÇÕES:
+
+1. MODERAÇÃO E ANTI-REUPLOAD: Quando conteúdo é moderado por infringir Termos de Uso, o sistema impede republicação. A equipe verifica no Laranjinha se há notificação correspondente.
+
+2. VALOR MÍNIMO DE ASSINATURA: R$ 14,90.
+
+3. RELATÓRIO DE VENDAS: Possui filtro para identificar compras incluídas no saldo a liberar.
+
+4. TERMOS DE USO: Novos termos entraram em vigor em 14 de agosto de 2026. Dúvidas de interpretação devem ser direcionadas à supervisão.
+
+5. TRADUÇÃO AUTOMÁTICA NO CHAT: Funcionalidade de tradução bidirecional em tempo real implementada.
+
+6. MENSAGEM DE RENOVAÇÃO: Creator configura mensagem automática para assinantes que renovam. Caminho: Foto do perfil → Definições → Configurações de Chat → Renovação de assinatura. Enviada no momento da renovação, não antes.
+
+7. VER PERFIL COMO ASSINANTE: Opção disponível no menu do perfil da creator.
+
+8. RANKING POR REGIÃO: Região determinada pelo CPF (não pelo endereço). Regiões: Norte, Nordeste, Centro-Oeste, Sudeste, Sul. Tocantins = Centro-Oeste. Creator não aparece no ranking se: perfil gratuito, sem vendas nas últimas 24h, cadastro como CNPJ, menos de 3 publicações. Atualizado uma vez por dia.
+
+9. EM ALTA — DESTAQUES: Categorias atuais: Perfis Gratuitos, Ofertas de Assinatura, Top Creators por Região, As Mais Mimadas, Bombando no Chat. Removidos: Rumo ao Topo, Em Alta nos Posts, Chamada um a um, Live nas Alturas.
+
+10. LARANJINHA — PERGUNTE: Aba de IA para creators com 3 abas (Notificações, Destaques, Pergunte). Limite de 30 perguntas por dia.
+
+11. ALTERAÇÃO DE E-MAIL: Novo fluxo disponível para contas de creators. Contas CNPJ continuam pelo atendimento. Submotivo: Erro de validação facial.
+
+12. META MENSAL DE FATURAMENTO: Creator define meta em reais no Meu Privacy, pode editar/excluir. Zera no primeiro dia de cada mês. Comissão de indicação não incluída.
+
+13. ANOTAÇÕES: Espaço na Área do Creator para criar, editar, fixar, duplicar e excluir anotações.
+
+14. VITRINE: Nova seção no perfil para venda de conteúdos avulsos via Destaques. Valor entre R$5,00 e R$2.000,00. Disponibilizada gradualmente.
+
+15. RASCUNHO: Creator pode salvar publicação como rascunho. Um rascunho por conta. Privado, não visível para assinantes.
+
+16. REPOSTAGEM: Creator pode repostar conteúdos próprios com nova descrição. Limite: 25 posts/dia (mesmo limite de publicações). Não é possível repostar uma repostagem.
+
+17. MENSAGEM DE ANIVERSÁRIO: Configurada uma vez, enviada automaticamente no aniversário de cada assinante ativo. Caminho: Chat → Configurações → Mensagens automáticas → Mensagem de aniversário. Até 500 caracteres.
+
+18. RÉGUA DE NOTIFICAÇÕES DO CHAT: Infrações não geram bloqueio (nesta etapa). A partir da 5ª infração em 60 dias, encaminhado para fila de moderação. Janela de contagem: 60 dias.
+
+19. CONSULTA DE SANÇÕES DO CHAT: Informar apenas: qual foi a infração, dia e horário. Mais informações: supervisão.
+
+20. PAGO NÃO LIBERADO: Usar botão "Reprocessar pagamento" no Live antes de encaminhar. Funciona para Pix, cartão e recarga Crypto na maioria dos casos.
+
+21. CANCELAMENTO DE DISPAROS EM MASSA: Creator pode cancelar disparo em andamento. Cancela mensagens não enviadas e remove as já entregues. Não pode ser desfeito. Devolve crédito ao limite diário.
+
+22. VALORES NA WALLET: Valores adicionados à Wallet não podem ser sacados.
+
+FORMATO DA SUA RESPOSTA:
+Sempre responda em JSON com este formato exato:
+{
+  "fonte": "Nome da seção ou procedimento de onde veio a informação",
+  "trecho": "Trecho relevante do procedimento que embasou a resposta",
+  "resposta_sugerida": "Texto pronto para a analista copiar e enviar ao creator, seguindo o tom de voz da Privacy",
+  "observacao": "Alguma observação interna para a analista (opcional, pode ser vazio)"
+}
+
+Se não souber a resposta com base no material disponível, informe que o caso deve ser direcionado à supervisão e sugira uma resposta genérica educada.`;
+
+var messages = [];
+var chatHistory = [];
+var currentId = null;
+var sampleFn = null;
+
+// Chama nossa Netlify Function (/.netlify/functions/chat), que fala com o Gemini
+// guardando a chave no servidor. Mantém a mesma assinatura que o resto do
+// código já espera: uma função que recebe o prompt e devolve {text: "..."}.
+function callGemini(prompt){
+  return fetch('/.netlify/functions/chat', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ prompt: prompt })
+  }).then(function(r){
+    return r.json().then(function(data){
+      if(!r.ok || data.error){
+        throw new Error(data.error || 'Erro ao consultar a IA.');
+      }
+      return { text: data.text };
+    });
+  });
+}
+
+sampleFn = callGemini;
+
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
+
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
+
+function sendSuggestion(text){document.getElementById('inp').value=text;send()}
+
+function newChat(){
+  messages=[];currentId=Date.now();
+  document.getElementById('messages').innerHTML='';
+  document.getElementById('welcome') && null;
+  var msgs=document.getElementById('messages');
+  msgs.innerHTML=`<div class="welcome" id="welcome">
+    <div class="welcome-icon">🤖</div>
+    <h2>Nova consulta</h2>
+    <p>Digite o caso ou dúvida para consultar os procedimentos internos.</p>
+    <div class="suggestions">
+      <button class="suggestion" onclick="sendSuggestion(this.textContent)">Como funciona o ranking por região?</button>
+      <button class="suggestion" onclick="sendSuggestion(this.textContent)">Creator não consegue republicar um conteúdo</button>
+      <button class="suggestion" onclick="sendSuggestion(this.textContent)">Qual é o valor mínimo de assinatura?</button>
+      <button class="suggestion" onclick="sendSuggestion(this.textContent)">Como configurar mensagem de renovação?</button>
+    </div>
+  </div>`;
+}
+
+function send(){
+  var inp=document.getElementById('inp');
+  var text=inp.value.trim();
+  if(!text)return;
+  inp.value='';inp.style.height='auto';
+
+  // Hide welcome
+  var w=document.getElementById('welcome');
+  if(w)w.remove();
+
+  addUserMsg(text);
+  messages.push({role:'user',content:text});
+
+  // Add to history
+  if(!currentId){currentId=Date.now();}
+  var hi=chatHistory.find(function(h){return h.id===currentId});
+  if(!hi){chatHistory.unshift({id:currentId,text:text.slice(0,40)+(text.length>40?'...':'')});renderHistory();}
+
+  if(!sampleFn){addAICard({fonte:'Erro',trecho:'',resposta_sugerida:'A IA ainda está carregando. Aguarde um momento e tente novamente.',observacao:''});return;}
+  showTyping();
+  document.getElementById('send-btn').disabled=true;
+
+  var msgs=[{role:'user',content:'Responda APENAS em JSON válido, sem texto antes ou depois. '+text}];
+
+  var turns = messages.map(function(m){return {role:m.role,content:m.content};});
+  sampleFn(SYSTEM_PROMPT+'\n\nResponda APENAS em JSON válido, sem texto antes ou depois.\n\nPergunta da analista: '+text, {modelTier:'default'})
+  .then(function(result){
+    removeTyping();
+    document.getElementById('send-btn').disabled=false;
+    var raw=result.text||'{}';
+    var clean=raw.replace(/```json|```/g,'').trim();
+    try{
+      var parsed=JSON.parse(clean);
+      messages.push({role:'assistant',content:raw});
+      addAICard(parsed);
+    }catch(e){
+      addAICard({fonte:'Resposta da IA',trecho:'',resposta_sugerida:raw,observacao:''});
+    }
+  })
+  .catch(function(err){
+    removeTyping();
+    document.getElementById('send-btn').disabled=false;
+    addAICard({fonte:'Erro',trecho:'',resposta_sugerida:'Não foi possível conectar. Tente novamente.',observacao:err&&err.message||'Erro de conexão.'});
+  });
+}
+
+function addUserMsg(text){
+  var msgs=document.getElementById('messages');
+  var now=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  var d=document.createElement('div');
+  d.className='msg user';
+  d.innerHTML='<div class="msg-bubble">'+escHtml(text)+'</div><div class="msg-time">'+now+'</div>';
+  msgs.appendChild(d);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(){
+  var msgs=document.getElementById('messages');
+  var d=document.createElement('div');
+  d.id='typing';d.className='msg ai';
+  d.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function removeTyping(){var t=document.getElementById('typing');if(t)t.remove();}
+
+function addAICard(data){
+  var msgs=document.getElementById('messages');
+  var id='copy_'+Date.now();
+  var d=document.createElement('div');
+  d.className='msg ai';
+  var html='<div class="ai-card">';
+
+  if(data.fonte){
+    html+='<div class="ai-card-section">'
+      +'<div class="section-label label-source">📋 Fonte do procedimento</div>'
+      +'<span class="source-tag">'+escHtml(data.fonte)+'</span>';
+    if(data.trecho){
+      html+='<div class="section-content" style="margin-top:6px;font-size:12px;color:var(--grey);border-left:2px solid var(--purple-l);padding-left:10px">'+escHtml(data.trecho)+'</div>';
+    }
+    html+='</div>';
+  }
+
+  if(data.resposta_sugerida){
+    html+='<div class="ai-card-section">'
+      +'<div class="section-label label-response">✉ Resposta sugerida para o creator</div>'
+      +'<div class="response-box" id="resp_'+id+'">'+escHtml(data.resposta_sugerida)+'</div>'
+      +'<button class="copy-btn" id="'+id+'" onclick="copyResp(\''+id+'\')">Copiar resposta</button>'
+      +'</div>';
+  }
+
+  if(data.observacao){
+    html+='<div class="ai-card-section">'
+      +'<div class="section-label label-tip">💡 Observação interna</div>'
+      +'<div class="section-content" style="color:var(--blue)">'+escHtml(data.observacao)+'</div>'
+      +'</div>';
+  }
+
+  html+='</div>';
+  d.innerHTML=html;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function copyResp(id){
+  var el=document.getElementById('resp_'+id);
+  if(!el)return;
+  navigator.clipboard.writeText(el.textContent).then(function(){
+    var btn=document.getElementById(id);
+    btn.textContent='Copiado!';btn.classList.add('copied');
+    setTimeout(function(){btn.textContent='Copiar resposta';btn.classList.remove('copied')},2000);
+  });
+}
+
+function renderHistory(){
+  var h=document.getElementById('history');
+  h.innerHTML=chatHistory.map(function(item){
+    return '<div class="history-item'+(item.id===currentId?' active':'')+'" onclick="loadHistory('+item.id+')">'+escHtml(item.text)+'</div>';
+  }).join('');
+}
+
+function loadHistory(id){
+  currentId=id;renderHistory();
+}
+
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
